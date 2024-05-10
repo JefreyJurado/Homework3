@@ -1,0 +1,85 @@
+package com.mycompany.ourfirstgui;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class MilestoneCalculator extends JFrame {
+
+    private JLabel milestone1Label;
+    private JLabel milestone2Label;
+    private JLabel terminalLabel;
+
+    private JTextField milestone1Field;
+    private JTextField milestone2Field;
+    private JTextField terminalField;
+
+    private JButton calculateButton;
+
+    public MilestoneCalculator() {
+        setTitle("Milestone Calculator");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        milestone1Label = new JLabel("Milestone 1 (25%):");
+        milestone2Label = new JLabel("Milestone 2 (40%):");
+        terminalLabel = new JLabel("Terminal Assessment (35%):");
+
+        milestone1Field = new JTextField(10);
+        milestone2Field = new JTextField(10);
+        terminalField = new JTextField(10);
+
+        calculateButton = new JButton("Calculate");
+        calculateButton.addActionListener(new CalculateButtonListener());
+
+        add(milestone1Label);
+        add(milestone1Field);
+
+        add(milestone2Label);
+        add(milestone2Field);
+
+        add(terminalLabel);
+        add(terminalField);
+
+        add(calculateButton);
+
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private class CalculateButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                double milestone1Grade = Double.parseDouble(milestone1Field.getText());
+                double milestone2Grade = Double.parseDouble(milestone2Field.getText());
+                double terminalGrade = Double.parseDouble(terminalField.getText());
+
+                if (milestone1Grade < 0 || milestone1Grade > 25) {
+                    throw new IllegalArgumentException("Invalid Milestone 1 grade!");
+                }
+                if (milestone2Grade < 0 || milestone2Grade > 40) {
+                    throw new IllegalArgumentException("Invalid Milestone 2 grade!");
+                }
+                if (terminalGrade < 0 || terminalGrade > 35) {
+                    throw new IllegalArgumentException("Invalid Terminal Assessment grade!");
+                }
+                
+                double totalGrade = (milestone1Grade) + (milestone2Grade) + (terminalGrade);
+
+                JOptionPane.showMessageDialog(null, "Your total grade is " + String.format("%.2f", totalGrade));
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Invalid input! Please enter numeric values.");
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(MilestoneCalculator::new);
+    }
+}
